@@ -33,13 +33,13 @@ app.post(baseAPI+"/contacts", (request, response) => {
 app.put(baseAPI+"/contacts", (request, response) => {
     response.sendStatus(405);
     console.log("PUT /contacts");
-})
+});
 
 app.delete(baseAPI+"/contacts", (request, response) => {
     contacts = [];
     response.sendStatus(200);
     console.log("DELETE /contacts");
-})
+});
 
 app.listen(port, () => {
     console.log("Server up and running");
