@@ -1,4 +1,5 @@
 var express = require("express");
+var bodyParser = require("body-parser");
 var port = (process.env.PORT || 3000);
 
 var app = express();
@@ -14,6 +15,8 @@ var contacts = [{
     phone: "67890",
     email: "luis@luis.com"
 }];
+
+app.use(bodyParser.json());
 
 app.get(baseAPI+"/contacts", (request, response) => {
     response.send(contacts);
