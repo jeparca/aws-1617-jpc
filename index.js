@@ -43,4 +43,4 @@ app.delete(baseAPI+"/contacts", (request, response) => {
 
 app.listen(port, () => {
     console.log("Server up and running");
-});
+}); 
