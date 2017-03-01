@@ -1,0 +1,7 @@
+var numbers=[1,2,3,4];
+
+//Aumenta dos y filtra mayores que 5
+
+numbersFiltered = numbers.map((x)=>{return x+2;}).filter((x)=>{return x>5;});
+
+console.log(numbersFiltered);
