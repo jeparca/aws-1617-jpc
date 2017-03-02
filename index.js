@@ -82,7 +82,7 @@ app.delete(baseAPI + "/contacts/:name", (request, response) => {
         response.sendStatus(404);
     }else{
         contacts = contacts.splice(index, 1);
-        response.send(contact);   
+        response.sendStatus(200);   
     }
     console.log("DELETE /contacts/" + nameParam);
 });
