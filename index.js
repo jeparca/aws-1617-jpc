@@ -58,7 +58,8 @@ app.put(baseAPI + "/contacts/:name", (request, response) => {
     var contact = request.body;
     contacts = contacts.map((c) => {
         if(nameParam.toLowerCase() == c.name.toLowerCase()){
-            c = contact;
+            c.phone = contact.phone;
+            c.email = contact.email;
         }
     });
     response.sendStatus(200);
