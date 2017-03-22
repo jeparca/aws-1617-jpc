@@ -12,10 +12,22 @@ var db = new dataStore({
     autoload : true
 });
 
+db.insert([{
+        name: "pepe",
+        phone: "12345",
+        email: "pepe@pepe.com"
+    },{
+        name: "luis",
+        phone: "1245",
+        email: "luis@pepe.com"
+    }]);
+
 var baseAPI = "/api/v1";
 
 
 app.use(bodyParser.json());
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.get(baseAPI + "/contacts", (request, response) => {
     db.find({}, (err, contacts) => {
