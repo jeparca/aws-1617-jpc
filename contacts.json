@@ -1,4 +1,4 @@
-[{
+{
     name: "Pepe",
     phone: "12345",
     email: "pepe@pepe.com"
@@ -6,4 +6,4 @@
     name: "Luis",
     phone: "67890",
     email: "luis@luis.com"
-}]
+}
