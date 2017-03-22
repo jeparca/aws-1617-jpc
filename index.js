@@ -1,25 +1,27 @@
 var express = require("express");
 var bodyParser = require("body-parser");
-var port = (process.env.PORT || 3000);
+var path = require("path");
+var dataStore = require("nedb");
 
+var port = (process.env.PORT || 3000);
 var app = express();
+var dbFileName = path.join(__dirname, 'contacts.json');
+
+var db = new dataStore({
+    filename : dbFileName,
+    autoload : true
+});
 
 var baseAPI = "/api/v1";
 
-var contacts = [{
-    name: "Pepe",
-    phone: "12345",
-    email: "pepe@pepe.com"
-}, {
-    name: "Luis",
-    phone: "67890",
-    email: "luis@luis.com"
-}];
 
 app.use(bodyParser.json());
 
 app.get(baseAPI + "/contacts", (request, response) => {
-    response.send(contacts);
+    db.find({}, (err, contacts) => {
+        response.send(contacts);    
+    });
+    
     console.log("GET /contacts");
 });
 
@@ -38,7 +40,8 @@ app.get(baseAPI + "/contacts/:name", (request, response) => {
 
 app.post(baseAPI + "/contacts", (request, response) => {
     var contact = request.body;
-    contacts.push(contact);
+    
+    db.insert(contact);
     response.sendStatus(201);
     console.log("POST /contacts");
 });
