@@ -26,16 +26,17 @@ app.get(baseAPI + "/contacts", (request, response) => {
 });
 
 app.get(baseAPI + "/contacts/:name", (request, response) => {
-    var nameParam = request.params.name;
-    var contact = contacts.filter((c) => {
-        return c.name.toLowerCase() == nameParam.toLowerCase();
-    })[0];
-    if (contact == null) {
-        response.sendStatus(404);
-    }else{
-        response.send(contact);   
-    }
     console.log("GET /contacts/" + nameParam);
+    var nameParam = request.params.name;
+    
+    db.find({name:nameParam}, (err,contacts) => {
+        if(contacts.length == 0)
+            response.sendStatus(404);
+        else
+            response.send(contacts[0]);
+    });
+
+
 });
 
 app.post(baseAPI + "/contacts", (request, response) => {
@@ -59,35 +60,38 @@ app.put(baseAPI + "/contacts", (request, response) => {
 app.put(baseAPI + "/contacts/:name", (request, response) => {
     var nameParam = request.params.name;
     var contact = request.body;
-    contacts = contacts.map((c) => {
-        if(nameParam.toLowerCase() == c.name.toLowerCase()){
-            c.phone = contact.phone;
-            c.email = contact.email;
+    console.log("PUT /contacts/"+nameParam);
+    db.update({name:nameParam},contact, {}, (err,numUpdates) => {
+        console.log("Contacts updated: "+numUpdates);
+        if(numUpdates == 0){
+            request.sendStatus(404);
+        }else{
+            response.sendStatus(200);
         }
     });
-    response.sendStatus(200);
-    console.log("PUT /contacts/"+nameParam);
+    
+    
 });
 
 app.delete(baseAPI + "/contacts", (request, response) => {
-    contacts = [];
-    response.sendStatus(200);
     console.log("DELETE /contacts");
+    db.remove({}, {multi:true}, (err, numRemoved) => {
+        console.log("Contacts removed: "+ numRemoved);
+        response.sendStatus(200);
+    });
 });
 
 app.delete(baseAPI + "/contacts/:name", (request, response) => {
     var nameParam = request.params.name;
-    var contact = contacts.filter((c) => {
-        return c.name.toLowerCase() == nameParam.toLowerCase();
-    })[0];
-    var index = contacts.indexOf(contact);
-    if (contact == null) {
-        response.sendStatus(404);
-    }else{
-        contacts = contacts.splice(index, 1);
-        response.sendStatus(200);   
-    }
     console.log("DELETE /contacts/" + nameParam);
+    db.remove({name:nameParam}, {multi:true}, (err, numRemoved) => {
+        if (numRemoved == 0) {
+            response.sendStatus(404);
+        }else{
+            console.log("Contacts removed: "+ numRemoved);
+            response.sendStatus(200);
+        }
+    });
 });
 
 app.listen(port, () => {
