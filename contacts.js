@@ -5,6 +5,18 @@ var db;
     
 var Contacts = function(){};
 
+Contacts.prototype.connectDb = function(callback) {
+    MongoClient.connect(process.env.MONGODB_URL, function(err, database) {
+        if(err) {
+            callback(err);
+        }
+        
+        db = database.collection('contacts');
+        
+        callback(err, database);
+    });
+};
+
 Contacts.prototype.allContacts = function(callback) {
     return db.find({}).toArray(callback);
 };
