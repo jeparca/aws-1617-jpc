@@ -1,13 +1,15 @@
+'use strict';
+
 var express = require("express");
 var bodyParser = require("body-parser");
 var path = require("path");
-var dataStore = require("nedb");
+var DataStore = require("nedb");
 
 var port = (process.env.PORT || 3000);
 var app = express();
 var dbFileName = path.join(__dirname, 'contacts.json');
 
-var db = new dataStore({
+var db = new DataStore({
     filename : dbFileName,
     autoload : true
 });
@@ -42,10 +44,11 @@ app.get(baseAPI + "/contacts/:name", (request, response) => {
     var nameParam = request.params.name;
     
     db.find({name:nameParam}, (err,contacts) => {
-        if(contacts.length == 0)
+        if(contacts.length === 0){
             response.sendStatus(404);
-        else
+        }else{
             response.send(contacts[0]);
+        }
     });
 
 
@@ -75,7 +78,7 @@ app.put(baseAPI + "/contacts/:name", (request, response) => {
     console.log("PUT /contacts/"+nameParam);
     db.update({name:nameParam},contact, {}, (err,numUpdates) => {
         console.log("Contacts updated: "+numUpdates);
-        if(numUpdates == 0){
+        if(numUpdates === 0){
             request.sendStatus(404);
         }else{
             response.sendStatus(200);
@@ -97,7 +100,7 @@ app.delete(baseAPI + "/contacts/:name", (request, response) => {
     var nameParam = request.params.name;
     console.log("DELETE /contacts/" + nameParam);
     db.remove({name:nameParam}, {multi:true}, (err, numRemoved) => {
-        if (numRemoved == 0) {
+        if (numRemoved === 0) {
             response.sendStatus(404);
         }else{
             console.log("Contacts removed: "+ numRemoved);
