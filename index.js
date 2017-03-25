@@ -82,6 +82,14 @@ app.put(baseAPI + "/contacts/:name", (request, response) => {
     console.log("UPDATE /contacts/"+name);
 });
 
-app.listen(port, () => {
-    console.log("Server with GUI up and running!!");
-});    
+contacts.connectDb((err) => {
+    if (err) {
+        console.log("Could not connect with MongoDB");
+        process.exit(1);
+    }
+    
+
+    app.listen(port, () => {
+        console.log("Server with GUI up and running!!");
+    });    
+});

@@ -7,7 +7,11 @@ var contacts = require('../contacts.js');
 
 describe('Contacts', function() {
     beforeEach(function(done) {
-        
+        contacts.connectDb((err) => {
+            if (err) {
+                return done(err);
+            }
+            
         
             contacts.removeAll(function(err) {
                 if (err) {
@@ -25,7 +29,8 @@ describe('Contacts', function() {
                 }], done);
             });
         });
-
+    });
+    
     describe('#allContacts()', function() {
         it('should return all contacts', function(done) {
             contacts.allContacts((err, res) => {
